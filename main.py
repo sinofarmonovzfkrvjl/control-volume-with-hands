@@ -63,7 +63,6 @@ with mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) a
                 if my < mcp_y:
                     # Calculate the distance between index finger tip and thumb tip
                     distance = np.sqrt((ix - tx)**2 + (iy - ty)**2)
-                    print(distance)
                     
                     # Normalize the distance to a volume level
                     vol = np.interp(distance, [50, 200], [min_vol, max_vol])
