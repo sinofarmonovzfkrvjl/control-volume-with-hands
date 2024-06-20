@@ -84,7 +84,7 @@ with mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) a
                     
                     sbc.set_brightness(distance_i_m)
 
-                    cv2.putText(frame, f'Volume: {int(distance_i_m)}%', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                    cv2.putText(frame, f'Brightness: {int(distance_i_m)}%', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
                 
                 # Draw circles on the index finger tip, thumb tip, and middle finger tip
                 cv2.circle(frame, (ix, iy), 10, (0, 255, 0), cv2.FILLED)
