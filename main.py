@@ -60,8 +60,8 @@ with mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) a
                 rx, ry = int(ring_finger_tip.x * w), int(ring_finger_tip.y * h)
                 px, py = int(pinky_finger_tip.x * w), int(pinky_finger_tip.y * h)
 
-                distance_i_m = np.sqrt((ix - mx)**2 + (iy - my)**2)
                 distance_m_r = np.sqrt((mx - rx)**2 + (my - ry)**2)
+                distance_t_r = np.sqrt((tx - rx)**2 + (ty - ry)**2)
                 
                 # Check if the middle finger is raised
                 if distance_m_r < 40:
@@ -77,13 +77,15 @@ with mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) a
                     # Display the volume level on the frame
                     cv2.putText(frame, f'Volume: {int((vol - min_vol) / (max_vol - min_vol) * 100)}%', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
-                if distance_i_m < 40:
+                if distance_t_r < 30:
                     
                     distance = np.sqrt((ix - tx)**2 + (iy - ty)**2)
                     
                     sbc.set_brightness(distance)
 
                     cv2.putText(frame, f'Volume: {int(distance)}%', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+            
+                print(distance_t_r)
                 
                 # Draw circles on the index finger tip, thumb tip, and middle finger tip
                 cv2.circle(frame, (ix, iy), 10, (0, 255, 0), cv2.FILLED)
