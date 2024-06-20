@@ -60,6 +60,7 @@ with mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) a
                 rx, ry = int(ring_finger_tip.x * w), int(ring_finger_tip.y * h)
                 px, py = int(pinky_finger_tip.x * w), int(pinky_finger_tip.y * h)
 
+                distance_i_m = np.sqrt((ix - mx)**2 + (iy - my)**2)
                 distance_m_r = np.sqrt((mx - rx)**2 + (my - ry)**2)
                 distance_t_r = np.sqrt((tx - rx)**2 + (ty - ry)**2)
                 
@@ -79,13 +80,11 @@ with mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) a
 
                 if distance_t_r < 30:
                     
-                    distance = np.sqrt((ix - tx)**2 + (iy - ty)**2)
+                    distance_i_m = np.sqrt((ix - mx)**2 + (iy - my)**2)
                     
-                    sbc.set_brightness(distance)
+                    sbc.set_brightness(distance_i_m)
 
-                    cv2.putText(frame, f'Volume: {int(distance)}%', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
-            
-                print(distance_t_r)
+                    cv2.putText(frame, f'Volume: {int(distance_i_m)}%', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
                 
                 # Draw circles on the index finger tip, thumb tip, and middle finger tip
                 cv2.circle(frame, (ix, iy), 10, (0, 255, 0), cv2.FILLED)
