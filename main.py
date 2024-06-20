@@ -4,6 +4,7 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
 import numpy as np
+import screen_brightness_control as sbc
 
 # Initialize Mediapipe Hand
 mp_hands = mp.solutions.hands
@@ -58,9 +59,12 @@ with mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) a
                 mcp_x, mcp_y = int(middle_finger_mcp.x * w), int(middle_finger_mcp.y * h)
                 rx, ry = int(ring_finger_tip.x * w), int(ring_finger_tip.y * h)
                 px, py = int(pinky_finger_tip.x * w), int(pinky_finger_tip.y * h)
+
+                distance_i_m = np.sqrt((ix - mx)**2 + (iy - my)**2)
+                distance_m_r = np.sqrt((mx - rx)**2 + (my - ry)**2)
                 
                 # Check if the middle finger is raised
-                if my < mcp_y:
+                if distance_m_r < 40:
                     # Calculate the distance between index finger tip and thumb tip
                     distance = np.sqrt((ix - tx)**2 + (iy - ty)**2)
                     
@@ -71,8 +75,15 @@ with mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) a
                     volume.SetMasterVolumeLevel(vol, None)
                     
                     # Display the volume level on the frame
-                    cv2.putText(frame, f'Volume: {int((vol - min_vol) / (max_vol - min_vol) * 100)}%', (10, 50),
-                                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                    cv2.putText(frame, f'Volume: {int((vol - min_vol) / (max_vol - min_vol) * 100)}%', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+
+                if distance_i_m < 40:
+                    
+                    distance = np.sqrt((ix - tx)**2 + (iy - ty)**2)
+                    
+                    sbc.set_brightness(distance)
+
+                    cv2.putText(frame, f'Volume: {int(distance)}%', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
                 
                 # Draw circles on the index finger tip, thumb tip, and middle finger tip
                 cv2.circle(frame, (ix, iy), 10, (0, 255, 0), cv2.FILLED)
