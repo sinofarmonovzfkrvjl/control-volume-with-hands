@@ -77,6 +77,7 @@ with mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) a
                     
                     # Display the volume level on the frame
                     cv2.putText(frame, f'Volume: {int((vol - min_vol) / (max_vol - min_vol) * 100)}%', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                    cv2.line(frame, (ix, iy), (tx, ty), (0, 255, 0), 2)
 
                 if distance_t_r < 30:
                     
@@ -85,6 +86,7 @@ with mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) a
                     sbc.set_brightness(distance_i_m)
 
                     cv2.putText(frame, f'Brightness: {int(distance_i_m)}%', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                    cv2.line(frame, (ix, iy), (mx, my), (0, 255, 0), 2)
                 
                 # Draw circles on the index finger tip, thumb tip, and middle finger tip
                 cv2.circle(frame, (ix, iy), 10, (0, 255, 0), cv2.FILLED)
